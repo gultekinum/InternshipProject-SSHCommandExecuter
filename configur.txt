@@ -1,0 +1,3 @@
+host:10.5.0.183:10.9.3.117:10.5.0.233:10.9.3.118
+logpath:/tmp/fkm*
+parameterpath:/DBSync_v1/parameter10:/DBSync_v1/parameter11

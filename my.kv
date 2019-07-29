@@ -1,0 +1,320 @@
+ScreenManager:
+    LoginScreen:
+        id:login
+    MainScreen:
+        id:main
+    AnotherScreen:
+        id:another
+    ScriptScreen:
+        id:scriptscreen
+    PassageScreen:
+        id:passagescreen
+    SettingScreen:
+        id:settingscreen
+
+<LoginScreen>:
+    name:'login'
+    BoxLayout:
+        orientation:"horizontal"
+        Label:
+            size_hint:0.2,1
+        BoxLayout:
+            id:select_box
+            orientation:"vertical"
+            Label:
+                size_hint:1,0.2
+            Image:
+                source: 'trident.png'
+                size_hint:1,0.4
+            Label:
+                text:"Trident"
+                font_size:40
+                size_hint:1,0.3
+                color:1,1,1,1
+            Label:
+                text:"created by umut gultekin"
+                font_size:10
+                size_hint:1,0.1
+            Button:
+                text:"Show Hosts"
+                on_release:
+                    root.host_list()
+                size_hint:1,0.2
+            Label:
+                size_hint:1,0.1
+            Button:
+                size_hint:1,0.2
+                text:"Settings"
+                on_release:
+                    root.remove_widgets()
+                    app.root.current="setting"
+                    root.manager.transition.direction="right"
+            Label:
+                size_hint:1,0.1
+
+        Label:
+            size_hint:0.2,1
+
+
+
+<MainScreen>:
+
+    name:"main"
+    password:password
+    user:user
+    result:result
+    output:output
+    commandbox:commandbox
+
+    BoxLayout:
+        orientation:"vertical"
+        Label:
+            size_hint:1,0.05
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint:1,0.06
+            Label:
+                size_hint:0.1,1
+                text:"User:"
+
+            TextInput:
+                size_hint:0.5,1
+                id:user
+                multiline:False
+            Label:
+                size_hint:0.2,1
+                text:"Password:"
+            TextInput:
+                size_hint:0.5,1
+                id:password
+                color: 1,0,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.height,self.width
+                multiline:False
+
+            Button:
+                size_hint:0.4,1
+                id:connect_btn
+                text:"Connect"
+                on_release:
+                    root.connect_btn()
+            Button:
+                text:"Back"
+                size_hint:0.4,1
+                on_release:
+
+                    root.disconnect()
+                    app.root.current="login"
+            Label:
+                id:result
+                text:"Not connected"
+                size_hint:0.4,1
+
+        Label:
+            size_hint:1,0.05
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint:1,0.06
+            Label:
+                text:"Command"
+                size_hint:0.15,1
+            TextInput:
+                id:commandbox
+                multiline:False
+                size_hint:0.4,1
+            Button:
+                size_hint:0.2,1
+                text:"Apply"
+                on_release:
+                    root.apply_btn()
+            Button:
+                size_hint:0.3,1
+                text:"LOG Files"
+                on_release:
+                    root.log_btn()
+                    if root.ssh.client:app.root.current="another"
+                    root.manager.transition.direction="down"
+            Button:
+                size_hint:0.25,1
+                text:"Scripts"
+                on_release:
+                    root.scripts_btn()
+                    if root.ssh.client:app.root.current="scriptscreen"
+                    root.manager.transition.direction="up"
+            Button:
+                size_hint:0.4,1
+                text:"Parameters"
+                on_release:
+                    if root.ssh.client:app.root.current="passagescreen"
+                    root.manager.transition.direction="left"
+
+        BoxLayout:
+            orientation:"vertical"
+            Label:
+                size_hint:1,0.05
+            TextInput:
+                id:output
+                text:
+
+<AnotherScreen>:
+    log_tail:log_tail
+    id: another
+    name: "another"
+    BoxLayout:
+        orientation:'vertical'
+        Button:
+            size_hint:1,0.1
+            text:"BACK"
+            on_release:
+                app.root.current="main"
+                root.manager.transition.direction="up"
+                root.button__refresh()
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                id:box
+                size_hint:0.25,1
+                orientation: 'vertical'
+            BoxLayout:
+                orientation:'vertical'
+                Label:
+                    color: 0,0,0,1
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    id:log_tail
+                    text:"Great power requires great responsibility"
+<ScriptScreen>:
+    name:"scriptscreen"
+    exe_label:exe_label
+    script_show_label:script_show_label
+    BoxLayout:
+        orientation:'vertical'
+        Button:
+            size_hint:1,0.1
+            text:"BACK"
+            on_release:
+                app.root.current="main"
+                root.manager.transition.direction="down"
+
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                id:script_box
+                size_hint:0.25,1
+                orientation: 'vertical'
+            BoxLayout:
+                id:script_run_box
+                orientation:"vertical"
+                size_hint:0.1,1
+            BoxLayout:
+                orientation:'vertical'
+                Label:
+                    id:script_show_label
+                    color: 0,0,0,1
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    text:"Great power requires great responsibility"
+                Label:
+                    id:exe_label
+                    size_hint:1,0.1
+                    text:"Waiting for run command..."
+<PassageScreen>:
+    parameter_label:parameter_label
+    name:"passagescreen"
+    BoxLayout:
+        orientation:"horizontal"
+        BoxLayout:
+            id:para_box
+            orientation:"vertical"
+            size_hint:0.4,1
+
+        BoxLayout:
+            id:edit_box
+            orientation:"vertical"
+            size_hint:0.1,1
+
+        BoxLayout:
+            orientation:"vertical"
+            Button:
+                size_hint:1,0.075
+                text:"Back"
+                on_release:
+                    root.refresh_widgets()
+                    app.root.current="main"
+                    root.manager.transition.direction="right"
+            BoxLayout:
+                orientation:"horizontal"
+                size_hint:1,0.075
+
+                Button:
+                    text:"parameter10"
+                    on_release:
+                        root.parameter_btn(str(10))
+                Button:
+                    text:"parameter11"
+                    on_release:
+                        root.parameter_btn(str(11))
+            BoxLayout:
+                id:save_box
+                orientation:"horizontal"
+                Label:
+                    size_hint:0.5,1
+                    id:parameter_label
+                    color: 0,0,0,1
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+<SettingScreen>:
+    name:"setting"
+    new_host_input:new_host_input
+    BoxLayout:
+        orientation:"vertical"
+        BoxLayout:
+            orientation:"horizontal"
+            size_hint:1,0.15
+            Label:
+                text:"Host IP:"
+                size_hint:0.2,1
+            TextInput:
+                multiline:False
+                id:new_host_input
+
+            Button:
+                text:"Add"
+                size_hint:0.2,1
+                on_release:
+                    root.add_host()
+            Label:
+                text:"or"
+                size_hint:0.1,1
+            Button:
+                text:"Delete"
+                size_hint:0.2,1
+                on_release:
+                    root.delete_data()
+
+        Button:
+            size_hint:1,0.2
+            text:"Back"
+            on_release:
+                root.manager.screens[0].first_select_press="True"
+                app.root.current="login"
+                root.manager.transition.direction="left"
+        Label:
